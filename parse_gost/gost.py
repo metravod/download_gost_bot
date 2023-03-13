@@ -1,12 +1,11 @@
 import os
 import shutil
+from typing import Tuple
 
 import re
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image
-
-from .headers import HEADERS
 
 
 class Gost:
@@ -17,7 +16,9 @@ class Gost:
     BASE_URL = "https://protect.gost.ru"
 
     def __init__(self, gost_url: str, name_gost: str):
-        self.gost_soupy = self._get_soupy(gost_url)
+        self.session_id, self.gost_url = self._prepare_url(gost_url)
+        self.headers = {'cookie': f'ASP.NET_SessionId={self.session_id}'}
+        self.gost_soupy = self._get_soupy(gost_url, self.headers)
         self.name_gost = name_gost
         self.list_links_page = []
         self.list_links_image = []
@@ -56,12 +57,12 @@ class Gost:
     def _get_all_links_image(self) -> None:
         """Собираем все ссылки на png со страницами госта"""
         for link in self.list_links_page:
-            page_soupy = self._get_soupy(link)
+            page_soupy = self._get_soupy(link, self.headers)
             self.list_links_image.append(self._get_image_link(page_soupy))
 
     def _get_and_save_image(self, n: int, link_image: str) -> None:
         """Забираем изображение и сохраняем его"""
-        img_data = requests.get(link_image, headers=HEADERS).content
+        img_data = requests.get(link_image, headers=self.headers).content
         with open(f"{self.name_gost}/{n}.png", 'wb') as handler:
             handler.write(img_data)
 
@@ -82,8 +83,20 @@ class Gost:
         css_style = requests.get(f'{self.BASE_URL}/{link_page}').text
         return self.BASE_URL + '/' + re.findall(r'\((.*?)\)', css_style)[0]
 
+    def _prepare_url(self, gost_url: str) -> Tuple[str, str]:
+        req = requests.get(gost_url)
+        session_id = req.cookies.get_dict()['ASP.NET_SessionId']
+        s = BeautifulSoup(req.content, 'lxml')
+        gost_url = [
+            a.get('href') for a in s.find_all('a')
+            if 'http' not in a.get('href')
+            and a.find('img') is None
+        ][0]
+        full_gost_url = self.BASE_URL + '/' + gost_url
+        return session_id, full_gost_url
+
     @staticmethod
-    def _get_soupy(gost_url: str) -> BeautifulSoup:
+    def _get_soupy(gost_url: str, headers: dict) -> BeautifulSoup:
         """Получем супчик из урла"""
-        html = requests.get(gost_url, headers=HEADERS)  # .text
+        html = requests.get(gost_url, headers=headers)  # .text
         return BeautifulSoup(html.content, 'lxml')
