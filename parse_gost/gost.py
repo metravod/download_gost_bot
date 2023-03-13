@@ -93,17 +93,13 @@ class Gost:
 
     def _prepare_url(self, gost_url: str) -> Tuple[str, str]:
         req = requests.get(gost_url)
-        logger.info(f'start requests >>> {req.content}')
         session_id = req.cookies.get_dict()['ASP.NET_SessionId']
-        logger.info(f'session_id >>> {session_id}')
         s = BeautifulSoup(req.content, 'html.parser')
-        logger.info(f"first soup >>> {s}")
         gost_url = [
             a.get('href') for a in s.find_all('a')
             if 'http' not in a.get('href')
             and a.find('img') is None
         ]
-        logger.info(f'len gost_url >>> {len(gost_url)}')
         full_gost_url = self.BASE_URL + '/' + gost_url[0]
         return session_id, full_gost_url
 
