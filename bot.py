@@ -2,7 +2,7 @@ from aiogram import Bot, Dispatcher, types, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from settings import bot_config
-from parse_gost.gost import Gost
+from parse_gost.gost import Gost, logger
 
 bot = Bot(token=bot_config.bot_token)
 storage = MemoryStorage()
@@ -19,7 +19,7 @@ async def start_message(message: types.Message):
 async def url_message(message: types.Message):
     url, name = message.text.split(', ')
     Gost(url, name).get()
-    print('get Gost >>> done')
+    logger.info('get Gost >>> done')
     await message.reply_document(open(f'{name}.pdf', 'rb'))
 
 

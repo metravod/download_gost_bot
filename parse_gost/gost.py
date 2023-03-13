@@ -10,6 +10,10 @@ import logging
 
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+logger.addHandler(ch)
 
 
 class Gost:
@@ -34,20 +38,20 @@ class Gost:
 
         # Собираем все ссылки на страницы ГОСТа с png
         self._get_all_links_page_gost()
-        logger.info('get_all_links_page_gost >>>', len(self.list_links_page))
+        logger.info(f'get_all_links_page_gost >>> {len(self.list_links_page)}')
 
         # Собираем все ссылки на сами png страниц ГОСТа
         self._get_all_links_image()
-        logger.info('get_all_links_image >>>', len(self.list_links_image))
+        logger.info(f'get_all_links_image >>> {len(self.list_links_image)}')
 
         # Идем по циклу по всем ссылкам на png и сохраняем их
         for n, link_image in enumerate(self.list_links_image):
             self._get_and_save_image(n, link_image)
-        logger.info('loop image >>> done')
+        logger.info(f'loop image >>> done')
 
         # Преобразуем отдельные png в один целый pdf
         self._convert_png_to_pdf()
-        logger.info('convert_png_to_pdf >>> done')
+        logger.info(f'convert_png_to_pdf >>> done')
 
         # Подчищяем за собой папку с png
         shutil.rmtree(self.name_gost)
@@ -95,8 +99,9 @@ class Gost:
             a.get('href') for a in s.find_all('a')
             if 'http' not in a.get('href')
             and a.find('img') is None
-        ][0]
-        full_gost_url = self.BASE_URL + '/' + gost_url
+        ]
+        logger.info(f'len gost_url >>> {len(gost_url)}')
+        full_gost_url = self.BASE_URL + '/' + gost_url[0]
         return session_id, full_gost_url
 
     @staticmethod
