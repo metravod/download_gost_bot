@@ -1,11 +1,15 @@
 import os
 import shutil
-from typing import Tuple
 
+from typing import Tuple
 import re
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class Gost:
@@ -30,20 +34,20 @@ class Gost:
 
         # Собираем все ссылки на страницы ГОСТа с png
         self._get_all_links_page_gost()
-        print('get_all_links_page_gost >>>', len(self.list_links_page))
+        logger.info('get_all_links_page_gost >>>', len(self.list_links_page))
 
         # Собираем все ссылки на сами png страниц ГОСТа
         self._get_all_links_image()
-        print('get_all_links_image >>>', len(self.list_links_image))
+        logger.info('get_all_links_image >>>', len(self.list_links_image))
 
         # Идем по циклу по всем ссылкам на png и сохраняем их
         for n, link_image in enumerate(self.list_links_image):
             self._get_and_save_image(n, link_image)
-        print('loop image >>> done')
+        logger.info('loop image >>> done')
 
         # Преобразуем отдельные png в один целый pdf
         self._convert_png_to_pdf()
-        print('convert_png_to_pdf >>> done')
+        logger.info('convert_png_to_pdf >>> done')
 
         # Подчищяем за собой папку с png
         shutil.rmtree(self.name_gost)
