@@ -12,7 +12,7 @@ jobs:
       - name: Deploy to server
         uses: fifsky/ssh-action@master
         with:
-          host: '46.17.100.151'
-          user: 'root'
+          host: $ {{ secrets.VPS_HOST }}
+          user: $ {{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_VPS }}
-          script: cd your-app-folder && python3 -m invoke deploy-demo-app-to-server
+          run: cd your-app-folder && python3 -m invoke deploy-demo-app-to-server
