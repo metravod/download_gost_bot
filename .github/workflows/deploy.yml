@@ -1,0 +1,18 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-demo-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to server
+        uses: fifsky/ssh-action@master
+        with:
+          host: '46.17.100.151'
+          user: 'root'
+          key: ${{ secrets.SSH_VPS }}
+          script: cd your-app-folder && python3 -m invoke deploy-demo-app-to-server
