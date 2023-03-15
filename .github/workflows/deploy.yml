@@ -12,8 +12,8 @@ jobs:
     - name: Executing remote command
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
+        host: ${{ secrets.VPS_HOST }}
+        USERNAME: ${{ secrets.VPS_USER }}
+        PORT: ${{ secrets.VPS_PORT }}
+        PASSWORD: ${{ secrets.SSH_PASS }}
         script: git pull && docker build --platform linux/amd64 download_gost_bot . && docker run download_gost_bot
