@@ -16,4 +16,4 @@ jobs:
         USERNAME: ${{ secrets.VPS_USER }}
         PORT: ${{ secrets.VPS_PORT }}
         PASSWORD: ${{ secrets.SSH_PASS }}
-        script: git pull && docker build --platform linux/amd64 download_gost_bot . && docker run download_gost_bot
+        script: cd ~/projects/download_gost_bot && git pull && docker build --platform linux/amd64 download_gost_bot . && docker run download_gost_bot
