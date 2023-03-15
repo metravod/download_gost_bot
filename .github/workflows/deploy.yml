@@ -1,17 +1,19 @@
 name: Deploy
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
-  deploy-demo-app:
+  build:
+
     runs-on: ubuntu-latest
+
     steps:
-      - uses: fifsky/ssh-action@master
-        with:
-          host: $ {{ secrets.VPS_HOST }}
-          user: $ {{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_VPS }}
-      - run: cd your-app-folder && python3 -m invoke deploy-demo-app-to-server
+    - uses: actions/checkout@v1
+    - name: Executing remote command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: ${{ secrets.PORT }}
+        KEY: ${{ secrets.SSHKEY }}
+        script: git pull && docker build --platform linux/amd64 download_gost_bot . && docker run download_gost_bot
