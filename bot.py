@@ -11,7 +11,8 @@ dp = Dispatcher(bot, storage=storage)
 
 @dp.message_handler(commands=['start'])
 async def start_message(message: types.Message):
-    text = f'Привет, я бот, который поможет тебе легко и быстро скачать нужный стандарт с protect.gost.ru'
+    text = f'Привет, я бот, который поможет тебе легко и быстро скачать нужный стандарт с protect.gost.ru.\n' \
+           f'Скинь мне пожалуйста ссылку на страницу со страницами стандарта и через запятую напиши его название.'
     await message.answer(text)
 
 
