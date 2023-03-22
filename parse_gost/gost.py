@@ -92,6 +92,7 @@ class Gost:
         return self.BASE_URL + '/' + re.findall(r'\((.*?)\)', css_style)[0]
 
     def _prepare_url(self, gost_url: str) -> Tuple[str, str]:
+        """Подготовка урла ГОСТа и получение id сессии ASP.NET"""
         req = requests.get(gost_url)
         session_id = req.cookies.get_dict()['ASP.NET_SessionId']
         s = BeautifulSoup(req.content, 'html.parser')
@@ -106,5 +107,5 @@ class Gost:
     @staticmethod
     def _get_soupy(gost_url: str, headers: dict) -> BeautifulSoup:
         """Получем супчик из урла"""
-        html = requests.get(gost_url, headers=headers)  # .text
+        html = requests.get(gost_url, headers=headers)
         return BeautifulSoup(html.content, 'html.parser')
