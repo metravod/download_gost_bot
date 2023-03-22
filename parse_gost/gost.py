@@ -86,6 +86,7 @@ class Gost:
 
     def _get_image_link(self, image_page: BeautifulSoup) -> str:
         """Получение ссылки на png из css стилей страницы госта"""
+        link_page = None
         for link in image_page.find_all('link'):
             link_page = link.get('href') if 'page' in link.get('href') else None
         css_style = requests.get(f'{self.BASE_URL}/{link_page}').text
