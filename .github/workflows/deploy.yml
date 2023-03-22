@@ -3,17 +3,34 @@ name: Deploy
 on: [push]
 
 jobs:
+
   build:
 
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
-    - name: Executing remote command
+    - name: Build container
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.VPS_HOST }}
         USERNAME: ${{ secrets.VPS_USER }}
         PORT: ${{ secrets.VPS_PORT }}
         PASSWORD: ${{ secrets.SSH_PASS }}
-        script: cd ~/projects/download_gost_bot && git pull && docker build -t download_gost_bot . && docker run -d download_gost_bot
+        script: |
+          cd ~/projects/download_gost_bot 
+          git pull 
+          docker build -t download_gost_bot .
+        
+  deploy:
+    
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run container
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        USERNAME: ${{ secrets.VPS_USER }}
+        PORT: ${{ secrets.VPS_PORT }}
+        PASSWORD: ${{ secrets.SSH_PASS }}
+        script: docker run -d download_gost_bot
