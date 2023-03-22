@@ -5,7 +5,6 @@ on: [push]
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -22,7 +21,7 @@ jobs:
           docker build -t download_gost_bot .
         
   deploy:
-    
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
