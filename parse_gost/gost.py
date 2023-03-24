@@ -11,9 +11,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-logger.addHandler(ch)
+handler = logging.FileHandler('app.log')
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 class Gost:
@@ -35,7 +37,7 @@ class Gost:
         os.mkdir(self.name_gost)
 
     def get(self) -> None:
-
+        logger.info(f'start for url={self.gost_url}')
         # Собираем все ссылки на страницы ГОСТа с png
         self._get_all_links_page_gost()
         logger.info(f'get_all_links_page_gost >>> {len(self.list_links_page)}')
