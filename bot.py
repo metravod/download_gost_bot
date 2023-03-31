@@ -19,9 +19,12 @@ async def start_message(message: types.Message):
 @dp.message_handler()
 async def url_message(message: types.Message):
     url, name = message.text.split(', ')
-    Gost(url, name).get()
-    logger.info('get Gost >>> done')
-    await message.reply_document(open(f'{name}.pdf', 'rb'))
+    try:
+        Gost(url, name).get()
+        logger.info('get Gost >>> done')
+        await message.reply_document(open(f'{name}.pdf', 'rb'))
+    except Exception as err:
+        await message.answer(f'Ох, что-то не получается :(\n Ошибка: {err}\nНапишите @metravod, он поможет')
 
 
 if __name__ == '__main__':
