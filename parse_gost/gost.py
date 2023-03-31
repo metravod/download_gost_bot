@@ -81,7 +81,7 @@ class Gost:
         list_images = []
         im = Image.open(f'{self.name_gost}/0.png')
         im_1 = im.convert('RGB')
-        for i in range(1, 11):
+        for i in range(1, len(self.list_links_image)):
             image = Image.open(f"{self.name_gost}/{i}.png")
             list_images.append(image.convert('RGB'))
         im_1.save(f'{self.name_gost}.pdf', save_all=True, append_images=list_images)
