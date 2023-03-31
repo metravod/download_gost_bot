@@ -24,7 +24,7 @@ async def url_message(message: types.Message):
         logger.info('get Gost >>> done')
         await message.reply_document(open(f'{name}.pdf', 'rb'))
     except Exception as err:
-        await message.answer(f'Ох, что-то не получается :(\n Ошибка: {err}\nНапишите @metravod, он поможет')
+        await message.answer(f'Ох, что-то не получается :(\nОшибка: {err}\nНапишите @metravod, он поможет')
 
 
 if __name__ == '__main__':
