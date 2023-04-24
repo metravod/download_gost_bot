@@ -1,2 +1,3 @@
 # download_gost_bot
-Бот для автоматической загрузки ГОСТов с protect.gost.ru
+
+Telegram bor for download PDF files normative documents from protect.gost.ru
