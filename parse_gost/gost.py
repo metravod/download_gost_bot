@@ -1,21 +1,22 @@
 import os
 import shutil
-
-from typing import Tuple
 import re
+import logging
+from typing import Tuple
+
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image
-import logging
+from PyPDF2 import PdfReader, PdfWriter
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler('app.log')
-handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+# logger.setLevel(logging.DEBUG)
+# handler = logging.FileHandler('app.log')
+# handler.setLevel(logging.DEBUG)
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# handler.setFormatter(formatter)
+# logger.addHandler(handler)
 
 
 class Gost:
@@ -54,6 +55,9 @@ class Gost:
         # Преобразуем отдельные png в один целый pdf
         self._convert_png_to_pdf()
         logger.info(f'convert_png_to_pdf >>> done')
+
+        # Сжимаем pdf, т.к. у нас ограничение от aiogram в 50 Mb
+        self._compress_pdf(self.name_gost)
 
         # Подчищяем за собой папку с png
         shutil.rmtree(self.name_gost)
@@ -112,3 +116,16 @@ class Gost:
         """Получем супчик из урла"""
         html = requests.get(gost_url, headers=headers)
         return BeautifulSoup(html.content, 'html.parser')
+
+    @staticmethod
+    def _compress_pdf(name_file: str) -> None:
+
+        reader = PdfReader(f'{name_file}.pdf')
+        writer = PdfWriter()
+
+        for page in reader.pages:
+            page.compress_content_streams()
+            writer.add_page(page)
+
+        with open(f'{name_file}_c.pdf', "wb") as f:
+            writer.write(f)

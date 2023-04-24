@@ -22,7 +22,7 @@ async def url_message(message: types.Message):
     try:
         Gost(url, name).get()
         logger.info('get Gost >>> done')
-        await message.reply_document(open(f'{name}.pdf', 'rb'))
+        await message.reply_document(open(f'{name}_c.pdf', 'rb'))
     except Exception as err:
         await message.answer(f'Ох, что-то не получается :(\nОшибка: {err}\nНапишите @metravod, он поможет')
 
