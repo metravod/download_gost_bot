@@ -17,8 +17,10 @@ jobs:
         PASSWORD: ${{ secrets.SSH_PASS }}
         script: |
           cd ~/projects/download_gost_bot 
-          git pull 
-          docker build -t download_gost_bot .
+          git pull
+          docker kill $(docker ps -q)
+          docker build -t download_gost_bot:latest .
+          docker push download_gost_bot:latest
         
   deploy:
     needs: build
@@ -32,4 +34,6 @@ jobs:
         USERNAME: ${{ secrets.VPS_USER }}
         PORT: ${{ secrets.VPS_PORT }}
         PASSWORD: ${{ secrets.SSH_PASS }}
-        script: docker run -d download_gost_bot
+        script: |
+          docker run -d download_gost_bot:latest
+          docker rmi download_gost_bot:latest
