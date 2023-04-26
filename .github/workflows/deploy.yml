@@ -18,7 +18,9 @@ jobs:
         script: |
           cd ~/projects/download_gost_bot 
           git pull
-          docker build -t download_gost_bot:latest .
+          docker build -t metravod/download_gost_bot:latest .
+          docker push metravod/download_gost_bot:latest
+          docker rmi metravod/download_gost_bot:latest
           
         
   deploy:
@@ -34,4 +36,4 @@ jobs:
         PORT: ${{ secrets.VPS_PORT }}
         PASSWORD: ${{ secrets.SSH_PASS }}
         script: |
-          docker run -d download_gost_bot:latest
+          docker run -d metravod/download_gost_bot:latest
