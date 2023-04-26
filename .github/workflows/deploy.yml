@@ -19,8 +19,6 @@ jobs:
           cd ~/projects/download_gost_bot 
           git pull
           docker build -t download_gost_bot:latest .
-          docker push download_gost_bot:latest
-          docker rmi download_gost_bot:latest
           
         
   deploy:
