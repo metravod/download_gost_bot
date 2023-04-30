@@ -64,6 +64,7 @@ class ImageToPDF:
         return os.path.getsize(f'{link}.pdf') / 8 / 100000
 
     def _split_pdf(self):
+        """Split pdf by half"""
 
         def _save_part_of_pdf(reader: PdfReader, pages: list, name_file: str, iterations: int):
             output = PdfWriter()
