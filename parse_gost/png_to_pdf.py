@@ -14,18 +14,23 @@ class ImageToPDF:
     def run(self):
 
         # Define count pages
+        print('Define count pages')
         self._define_count_page()
 
         # Create pdf from all png
+        print('Create pdf from all png')
         self._convert_png_to_pdf()
 
         # Read final pdf
+        print('Read final pdf')
         self._read_final_pdf()
 
         # Try to compress file
+        print('Try to compress file')
         self._compress_pdf()
 
         # Split large file
+        print('Split large file')
         if self._define_size_file(self.name_gost) > 50:
             self._split_pdf()
 
@@ -66,6 +71,7 @@ class ImageToPDF:
     def _split_pdf(self):
 
         def _save_part_of_pdf(reader: PdfReader, pages: list, name_file: str, iterations: int):
+            print('split >>>', pages)
             output = PdfWriter()
             for page in range(*pages):
                 output.add_page(reader.pages[page])
@@ -76,7 +82,7 @@ class ImageToPDF:
 
         range_pages = {
             'first_half': [0, middle_page],
-            'second_half': [middle_page + 1, self.count_pages + 1]
+            'second_half': [middle_page, self.count_pages]
         }
 
         for i, half in enumerate(range_pages):

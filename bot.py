@@ -23,8 +23,8 @@ async def url_message(message: types.Message):
         Gost(url, name).get()
         logger.info('get Gost >>> done')
         try:
+            await message.reply_document(open(f'{name}_0.pdf', 'rb'))
             await message.reply_document(open(f'{name}_1.pdf', 'rb'))
-            await message.reply_document(open(f'{name}_2.pdf', 'rb'))
         except:
             await message.reply_document(open(f'{name}.pdf', 'rb'))
     except Exception as err:
