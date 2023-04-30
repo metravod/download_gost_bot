@@ -19,8 +19,6 @@ jobs:
           cd ~/projects/download_gost_bot 
           git pull
           docker build -t metravod/download_gost_bot:latest .
-          docker push metravod/download_gost_bot:latest
-          docker rmi metravod/download_gost_bot:latest
           
         
   deploy:
