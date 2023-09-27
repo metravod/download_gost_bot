@@ -17,7 +17,7 @@ async def error(update, err):
 @dp.message_handler(commands=['start'])
 async def start_message(message: types.Message):
     text = f'Привет, я бот, который поможет тебе легко и быстро скачать нужный стандарт с protect.gost.ru.\n' \
-           f'Скинь мне пожалуйста ссылку на страницу со страницами стандарта и через запятую напиши его название.'
+           f'Скинь мне пожалуйста ссылку на страницу со страницами стандарта и через запятую укажи название для конечного файла.'
     await message.answer(text)
 
 
