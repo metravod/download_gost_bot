@@ -18,10 +18,10 @@ jobs:
         script: |
           cd ~/projects/download_gost_bot 
           git pull
+          docker stop gptishka
+          docker rm $(docker container ls --filter 'status=exited')
+          docker rmi metravod/download_gost_bot
           docker build -t metravod/download_gost_bot:latest .
-          docker push metravod/download_gost_bot:latest
-          docker rmi metravod/download_gost_bot:latest
-          
         
   deploy:
     needs: build
