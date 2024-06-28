@@ -1,7 +1,7 @@
 from aiogram import Bot, Dispatcher, types, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-from settings import bot_config, admin_id
+from settings import bot_config
 from parse_gost.gost import Gost, logger
 
 bot = Bot(token=bot_config.bot_token)
@@ -11,7 +11,7 @@ dp = Dispatcher(bot, storage=storage)
 
 @dp.errors_handler()
 async def error(update, err):
-    await bot.send_message(chat_id=admin_id, text=f'Там всё упало - {type(err).__name__}: {err}')
+    await bot.send_message(chat_id=bot_config.admin_id, text=f'Там всё упало - {type(err).__name__}: {err}')
 
 
 @dp.message_handler(commands=['start'])
